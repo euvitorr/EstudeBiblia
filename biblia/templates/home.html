@@ -1,0 +1,264 @@
+<header><script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</header><body>
+    <div class="h-screen w-screen bg-indigo-400 overflow-hidden absolute flex items-center">
+    <div class="w-screen h-64 absolute top-0 opacity-50 left-0 -my-40 -mx-64 bg-indigo-300 rounded-full"></div>
+    <div class="w-64 h-64 -mx-32 bg-indigo-300 opacity-50 rounded-full"></div>
+    <div class="w-64 h-64 ml-auto relative opacity-50 -mr-32 bg-indigo-300 rounded-full"></div>
+    <div class="w-screen h-64 absolute opacity-50 bottom-0 right-0 -my-40 -mx-64 bg-indigo-300 rounded-full"></div>
+  </div>
+  
+  <div class="container mx-auto h-screen py-16 px-8 relative">
+    <div class="flex w-full rounded-lg h-full lg:overflow-hidden overflow-auto lg:flex-row flex-col shadow-2xl">
+      <div class="lg:w-1/2 bg-white text-gray-800 flex flex-col">
+        <div class="p-8 shadow-md relative bg-white">
+          <div class="flex items-center">
+            <img src="https://randomuser.me/api/portraits/men/1.jpg" class="w-10 h-10 block rounded object-cover object-top" />
+            <div class="text-indigo-600 font-medium ml-3">Vitor Rios Rodrigues</div>
+            <button class="bg-indigo-100 text-indigo-400 ml-auto w-8 h-8 flex items-center justify-center rounded">
+              <svg stroke="currentColor" class="w-4 h-4" viewBox="0 0 24 24" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+            </button>
+
+
+          </div>
+          <h1 class="font-medium text-lg mt-6">{{ version.id|upper }}</h1>
+          <p class="text-gray-600 text-sm">{{ version.name }}</p>
+          <div class="mt-6 flex">
+            <div class="relative inline-block text-left">
+                <button class="bg-indigo-500 text-white py-2 text-sm px-3 rounded focus:outline-none dropdown-button"  id="livros" aria-expanded="false" aria-haspopup="false" >{{ book }}</button>
+                <div class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="livros" tabindex="-1">
+                    <div class="py-1" role="none" id="link-livros">
+                    {% for book in books %}
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{book.id}}" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}">{{ book.name }}</a>
+                    {% endfor %}
+                    </div></div>
+            </div>
+            
+            <div class="relative inline-block text-left">
+                <button class="ml-4 text-gray-600 py-2 text-sm px-3 dropdown-button rounded focus:outline-none border border-gray-400"  id="capitulos" aria-expanded="false" aria-haspopup="false" >{{ chapter }}</button>
+                <div class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="capitulos" tabindex="-1">
+                    <div class="py-1" role="none" id="link-capitulos">
+                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                    {% for chap in chaps %}
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ book.id }}/{{chap.number}}" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}_{{chap.number}}">{{chap.number}}</a>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative ml-auto flex-1 pl-8 sm:block hidden">
+              <input placeholder="Pesquisar em toda bíblia" type="text" class="w-full border rounded border-gray-400 h-full focus:outline-none pl-4 pr-8 text-gray-700 text-sm text-gray-500">
+              <svg stroke="currentColor" class="w-4 h-4 absolute right-0 top-0 mt-3 mr-2 text-gray-500" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="overflow-auto flex-grow">
+
+        {% for annotation in annotations %}
+            <div class="bg-gray-200 px-8 py-6 flex items-center border-b border-gray-300">
+            <div class="flex ml-4">
+                <div class="flex flex-col pl-4 pr-8">
+                <h2 class="font-medium text-sm">{{ annotation.title }}</h2>
+                <h3 class="text-gray-500 text-sm">{{ annotation.content|truncatechars:100 }}</h3>
+                <h3 class="text-gray-500 text-sm mt-2">{{ annotation.start_verse }} - {{ annotation.end_verse }}</h3>
+                </div>
+            </div>
+            <button class="text-gray-500 flex items-center text-sm focus:outline-none rounded ml-auto py-2 leading-none">
+                <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                </svg>
+                Editar Anotação
+            </button>
+            </div>
+        {% endfor %}
+
+        </div>
+      </div>
+      <div class="lg:w-1/2 bg-indigo-600 text-white flex flex-col">
+        <div class="p-8 flex flex-1 items-start overflow-auto">
+          <div class="flex-1 pl-10"><form id = 'formNote'>
+
+            {% for verse in verses %}
+
+            <div class="flex mb-8">
+                <input id="indigo-checkbox" type="checkbox" value="" class="w-4 h-4 text-indigo-600 bg-black-100 border-black-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-black-800 focus:ring-2 dark:bg-black-700 dark:border-black-600 mr-4 mt-2" value="opcao{{ verse.number }}">
+              
+              <div class="flex-grow">
+                <h3 class="text-sm mb-1">{{ verse.verse }}</h3>
+                <h4 class="text-xs text-indigo-300 italic">{{ verse.chapter }}:{{ verse.number }}</h4>
+              </div>
+              <button class="text-indigo-300 flex-shrink-0 ml-2">
+                <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="1"/>
+                  <circle cx="19" cy="12" r="1"/>
+                  <circle cx="5" cy="12" r="1"/>
+                </svg>
+              </button>
+            </div>
+            {% endfor %} </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="fixed h-screen right-0 top-0 items-center flex">
+    <div>
+        <div class="p-2 bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 inline-flex items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex-col">
+        <button class="bg-gray-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="gray"></button>
+        <button class="bg-red-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="red"></button>
+        <button class="bg-orange-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="orange"></button>
+        <button class="bg-green-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="green"></button>
+        <button class="bg-teal-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="teal"></button>
+        <button class="bg-blue-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="blue"></button>
+        <button class="bg-indigo-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="indigo"></button>
+        <button class="bg-purple-500 w-5 h-5 rounded-full mb-2 outline-none focus:outline-none" theme-button="purple"></button>
+        <button class="bg-pink-500 w-5 h-5 rounded-full outline-none focus:outline-none" theme-button="pink"></button>
+        </div>
+
+        <div class="p-2 bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex-col">
+            <button class="outline-none focus:outline-none" data-toggle="modal" data-target="#modalNota"><i class="fas fa-pencil-alt text-indigo-600"></i></button>
+        </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Funções de Utilidade
+  const toggleDropdown = (buttonId) => {
+    const menuButton = document.getElementById(buttonId);
+    const dropdownMenu = menuButton.nextElementSibling;
+    const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+    menuButton.setAttribute('aria-expanded', !isExpanded);
+    dropdownMenu.classList.toggle('hidden');
+  };
+
+
+  // Manipuladores de Eventos para Dropdowns
+  ['livros', 'capitulos'].forEach(toggleId => {
+    document.getElementById(toggleId).addEventListener('click', () => toggleDropdown(toggleId));
+  });
+
+  // Lógica para Carregar e Atualizar Livros, Capítulos e Versículos
+  // Considerando que esta lógica é específica e já está bem definida em seu script, não a modifiquei aqui.
+  // Lembre-se de adaptar as chamadas de função e IDs conforme necessário.
+
+
+  // Fechar Dropdowns ao Clicar Fora
+  document.body.addEventListener('click', function (event) {
+    const dropdownButtons = document.querySelectorAll('.dropdown-button');
+    dropdownButtons.forEach(botao => {
+      if (!botao.contains(event.target)) {
+        const dropdown = botao.nextElementSibling;
+        botao.setAttribute('aria-expanded', 'false');
+        dropdown.classList.add('hidden');
+      }
+    });
+  });
+});
+
+        </script>
+                
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+
+                        function obterValorCookie(nome) {
+    let nomeCookie = nome + "=";
+    let cookieDecodificado = decodeURIComponent(document.cookie); // Decodifica a string de cookie
+    let ca = cookieDecodificado.split(';'); // Divide a string em um array de cookies
+
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(nomeCookie) == 0) {
+            return c.substring(nomeCookie.length, c.length);
+        }
+    }
+    return "indigo";
+}
+                        const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
+  const themeButtons = document.querySelectorAll("[theme-button]");
+  var valorCookie = obterValorCookie("theme");
+
+  var currTheme = valorCookie;
+
+  const updateDropdownHoverStyles = (theme) => {
+    document.querySelectorAll('.dropdown-menu a, .dropdown-menu li').forEach((link) => {
+      link.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
+      link.classList.add(`hover:bg-${theme}-500`, `hover:text-white`);
+    });
+
+    document.cookie = `theme=${theme}; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/`;
+
+
+  };
+
+  const changeTheme = (theme) => {
+    allElements.forEach((element) => {
+      const classes = element.getAttribute("class");
+      if (classes) {
+        const newClasses = classes.replace(new RegExp(`\\b${currTheme}\\b`, "g"), theme);
+        element.setAttribute("class", newClasses);
+      }
+    });
+    updateDropdownHoverStyles(theme);
+    currTheme = theme;
+  };
+
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      changeTheme(e.target.getAttribute("theme-button"));
+    });
+  });
+                    });
+
+
+        
+                
+                    
+                    document.addEventListener('DOMContentLoaded', function() {
+
+                        const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
+  const themeButtons = document.querySelectorAll("[theme-button]");
+  var currTheme = "indigo";
+
+  const updateDropdownHoverStyles = (theme) => {
+    document.querySelectorAll('.dropdown-menu a, .dropdown-menu li').forEach((link) => {
+      link.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
+      link.classList.add(`hover:bg-${theme}-500`, `hover:text-white`);
+    });
+  };
+
+  const changeTheme = (theme) => {
+    allElements.forEach((element) => {
+      const classes = element.getAttribute("class");
+      if (classes) {
+        const newClasses = classes.replace(new RegExp(`\\b${currTheme}\\b`, "g"), theme);
+        element.setAttribute("class", newClasses);
+      }
+    });
+    updateDropdownHoverStyles(theme);
+    currTheme = theme;
+  };
+
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      changeTheme(e.target.getAttribute("theme-button"));
+    });
+  });
+                  // Ouvinte de eventos para os links de livros
+                    })
+                
+                    </script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+                    
+</body>

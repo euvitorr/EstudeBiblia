@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    command: ["/entrypoint.sh"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: bible
+      MYSQL_USER: euvitorr
+      MYSQL_PASSWORD: euvitorr
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: euvitorr
+      PMA_PASSWORD: euvitorr
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    
+volumes:
+  mysql_data:
