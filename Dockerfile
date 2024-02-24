@@ -1,35 +1,37 @@
-# Imagem oficial do Python como base
-FROM python:3.8-slim
+# Usa a imagem base do Python Alpine, que é leve e adequada para produção
+FROM python:3.8-alpine
 
-# Definir o diretório de trabalho dentro do contêiner
+# Define o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Evitar que Python escreva arquivos .pyc no disco (opcional)
-ENV PYTHONDONTWRITEBYTECODE 1
-# Buffering do Python desativado para permitir a log em tempo real dentro do contêiner
-ENV PYTHONUNBUFFERED 1
+# Instala dependências necessárias, incluindo o Node.js, o Yarn e o Bash
+RUN apk add --no-cache \
+    bash \
+    curl \
+    build-base \
+    libffi-dev \
+    musl-dev \
+    openssl-dev \
+    libgcc \
+    mysql-dev \
+    nodejs \
+    npm \
+    && npm install -g yarn
 
-# Instalar dependências do sistema necessárias
-RUN apt-get update && apt-get install -y \
-    default-libmysqlclient-dev \
-    pkg-config \
-    gcc \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Atualizar pip
-RUN pip install --upgrade pip
-RUN apt-get update && apt-get install -y netcat-openbsd \
-    && rm -rf /var/lib/apt/lists/*
-
-# Instalar as dependências do projeto Django
-# Copia o script de entrada
+# Copia o script de entrada e dá permissão de execução
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-
+# Copia o arquivo de dependências do Python e instala as dependências
 COPY requirements.txt /app/
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copiar o projeto para o diretório /app dentro do contêiner
-COPY . /app/
+# Copia os arquivos de dependências do frontend e instala as dependências
+COPY frontend/package*.json /app/frontend/
+RUN cd frontend && yarn install
+
+# Copia o restante dos arquivos do projeto para o contêiner
+COPY . /app
+
+# Define o script de entrada como ponto de entrada
+ENTRYPOINT ["/entrypoint.sh"]
