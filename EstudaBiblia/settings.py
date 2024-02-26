@@ -92,7 +92,13 @@ DATABASES = {
         'PASSWORD': 'euvitorr',
         'HOST': 'db',  # Nome do serviço no docker-compose
         'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1, character_set_connection=utf8mb4, collation_connection=utf8mb4_unicode_ci",
+        },
     }
+
+
 }
 
 

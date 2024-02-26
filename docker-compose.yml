@@ -11,6 +11,8 @@ services:
       MYSQL_DATABASE: bible
       MYSQL_USER: euvitorr
       MYSQL_PASSWORD: euvitorr
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
 
   web:
     build: .
@@ -38,6 +40,7 @@ services:
       PMA_HOST: db
       PMA_USER: euvitorr
       PMA_PASSWORD: euvitorr
+      PHP_UPLOAD_MAX_FILESIZE: 8M
     ports:
       - "8080:80"
     depends_on:
