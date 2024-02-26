@@ -1,23 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Header from './BibleAPP/Header';
+import MainContent from './BibleAPP/MainContent';
+// Importação do CSS do Tailwind gerado (assumindo que você adicionou as diretivas do Tailwind em index.css)
+import './index.css'; 
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App"> {/* Você pode começar a usar as classes do Tailwind aqui. Por exemplo, use "App" para aplicar estilos. */}
+      <Header />
+      <MainContent />
     </div>
   );
 }
