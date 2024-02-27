@@ -14,7 +14,7 @@ python manage.py migrate
 # Carrega os dados iniciais
 if [ $(python manage.py shell -c "from django.apps import apps; print(apps.get_model('biblia.Book').objects.count())") -eq 0 ]; then
     echo "Carregando dados iniciais..."
-    python manage.py loaddata backup.json
+    python manage.py loaddata backup_myapp.json
 else
     echo "Dados iniciais já carregados."
 fi
