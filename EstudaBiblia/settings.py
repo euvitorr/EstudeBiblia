@@ -86,6 +86,9 @@ DATABASES = {
         'PASSWORD': 'euvitorr',
         'HOST': 'db',  # Nome do serviço no docker-compose
         'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
