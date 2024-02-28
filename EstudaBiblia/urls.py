@@ -10,8 +10,8 @@ urlpatterns = [
     # Rota com parâmetros
     path('', views.home, name='home_without_params'),
     path('<str:id_livro>/<int:id_capitulo>/', views.home, name='home_with_params'),
-        path('<str:id_livro>', views.home, name='home_without_cap'),
-
+    path('<str:id_livro>', views.home, name='home_without_cap'),
+    path('<str:id_livro>/<int:id_capitulo>/create_note/', views.salvar_nota, name='create_note'),
     # Adicionando novas URLs para API AJAX
     path('api/livros/', views.livros_list, name='api_livros'),
     path('api/livros/<str:id_livro>/capitulos/', views.capitulos_por_livro, name='api_capitulos_por_livro'),

@@ -3,8 +3,39 @@ from django.http import JsonResponse
 from biblia.models import Verse, Book, Version, Chapter
 from anotacoes.models import Note  # Ajuste para o nome real do seu modelo de anotações
 from django.db.models import Min, Max
+from django.views.decorators.csrf import csrf_exempt
+import json
 
-def home(request, id_livro=None, id_capitulo=None):
+@csrf_exempt
+def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao ='nvi'):
+    if request.method == 'POST':
+        # Carregando os dados da requisição
+        data = json.loads(request.body)
+        title = data.get('title')
+        content = data.get('content')
+
+    
+        livro = Book.objects.get(id=id_livro)
+
+        capitulo = Chapter.objects.get(number = id_capitulo,book=livro)
+        
+        versao = Version.objects.get(id=id_versao)
+        # Criar a nota associada ao livro e capítulo
+        note = Note.objects.create(
+            title = title,
+            content = content,
+            version = versao,
+            book = livro,  # Assumindo que você tem um campo 'book' em Note
+            chapter = capitulo  # Assumindo que você tem um campo 'chapter' em Note
+        )
+
+
+        return JsonResponse({'status': 'success', 'note_id': title})
+    else:
+        return JsonResponse({'status': 'error'})
+
+
+def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
 
     if id_livro != None and id_capitulo == None:
         id_capitulo = 1
@@ -15,8 +46,8 @@ def home(request, id_livro=None, id_capitulo=None):
     
     
     nome_livro = request.GET.get('livro', id_livro)  # Exemplo: 'João'
-    id_versao = request.GET.get('versao', 'nvi')  # Exemplo: 'nvi'
-    capitulo = int(request.GET.get('capitulo', id_capitulo))  # Exemplo: 4
+    id_versao = request.GET.get('versao', id_versao)  # Exemplo: 'nvi'
+    capitulo = request.GET.get('capitulo', id_capitulo)  # Exemplo: 4
     # Buscar todos os livros disponíveis
     books = Book.objects.all()
 
@@ -27,6 +58,7 @@ def home(request, id_livro=None, id_capitulo=None):
     # Buscar o objeto da versão especificada, ou padrão se não especificado
     version = get_object_or_404(Version, id=id_versao)
     
+    capitulo = get_object_or_404(Chapter, number=id_capitulo,book=book)
     # Buscar todos os versículos do capítulo especificado na versão especificada
     verses = Verse.objects.filter(book=book, chapter=capitulo, version=version)
     
@@ -36,22 +68,11 @@ def home(request, id_livro=None, id_capitulo=None):
     
     # Adapte a busca de anotações para considerar o capítulo e versão especificados
     annotations = Note.objects.filter(
-        ranges__version=version,
-        ranges__start_book=book,
-        ranges__start_chapter=capitulo,
-        ranges__end_book=book,
-        ranges__end_chapter=capitulo
+        version=version,
+        book=book,
+        chapter=capitulo
     ).distinct()
 
-    # Ajuste para incluir start_verse e end_verse nas anotações
-    for annotation in annotations:
-        ranges = annotation.ranges.all()
-        if ranges:
-            annotation.start_verse = f"{ranges[0].start_book.name} {ranges[0].start_chapter}:{ranges[0].start_verse}"
-            annotation.end_verse = f"{ranges[0].end_verse}"
-        else:
-            annotation.start_verse = "N/A"
-            annotation.end_verse = "N/A"
 
     context = {
         'verses': verses,
@@ -80,11 +101,11 @@ def livros_list(request):
     livros = Book.objects.all().values('id', 'name')
     return JsonResponse(list(livros), safe=False)
 
-def capitulos_por_livro(request, id_livro):
+def capitulos_por_livro(request, id_livro, capitulo='1'):
     # Buscar o objeto do livro especificado, ou padrão se não especificado
     nome_livro = request.GET.get('livro', id_livro)  # Exemplo: 'João'
     id_versao = request.GET.get('versao', 'nvi')  # Exemplo: 'nvi'
-    capitulo = int(request.GET.get('capitulo', 1))  # Exemplo: 4
+    capitulo = request.GET.get('capitulo', 1)  # Exemplo: 4
     book = get_object_or_404(Book, id=nome_livro)
     capitulos = Verse.objects.filter(book=book.name).values('chapter').distinct()
     capitulos_list = [{'id': c['chapter'], 'numero': c['chapter']} for c in capitulos]
@@ -96,6 +117,7 @@ def capitulos_por_livro(request, id_livro):
     # Buscar o objeto da versão especificada, ou padrão se não especificado
     version = get_object_or_404(Version, id=id_versao)
     
+    capitulo = get_object_or_404(Chapter, number=capitulo,book=book)
     # Buscar todos os versículos do capítulo especificado na versão especificada
     verses = Verse.objects.filter(book=book, chapter=capitulo, version=version)
     
@@ -105,22 +127,12 @@ def capitulos_por_livro(request, id_livro):
     
     # Adapte a busca de anotações para considerar o capítulo e versão especificados
     annotations = Note.objects.filter(
-        ranges__version=version,
-        ranges__start_book=book,
-        ranges__start_chapter=capitulo,
-        ranges__end_book=book,
-        ranges__end_chapter=capitulo
+        version=version,
+        book=book,
+        chapter=capitulo
     ).distinct()
 
-    # Ajuste para incluir start_verse e end_verse nas anotações
-    for annotation in annotations:
-        ranges = annotation.ranges.all()
-        if ranges:
-            annotation.start_verse = f"{ranges[0].start_book.name} {ranges[0].start_chapter}:{ranges[0].start_verse}"
-            annotation.end_verse = f"{ranges[0].end_verse}"
-        else:
-            annotation.start_verse = "N/A"
-            annotation.end_verse = "N/A"
+
 
     context = {
         'verses': verses,
