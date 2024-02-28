@@ -1,7 +1,18 @@
 <header><script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- Inclua o script do Quill -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script><style>
+      .dropdown-menu {
+    z-index: 1050; /* Valor exemplo, ajuste conforme necessário */
+    }
+    .modal {
+    z-index: 1000; /* Valor exemplo, certifique-se de que é menor que o do dropdown */
+    }
+    
+    </style>
+    <meta name="csrf-token" content="{{ csrf_token }}">
 </header><body>
     <div class="h-screen w-screen bg-indigo-400 overflow-hidden absolute flex items-center">
     <div class="w-screen h-64 absolute top-0 opacity-50 left-0 -my-40 -mx-64 bg-indigo-300 rounded-full"></div>
@@ -11,7 +22,7 @@
   </div>
   
   <div class="container mx-auto h-screen py-16 px-8 relative">
-    <div class="flex w-full rounded-lg h-full lg:overflow-hidden overflow-auto lg:flex-row flex-col shadow-2xl">
+    <div class="flex w-full rounded-lg h-[90vh] lg:overflow-hidden lg:flex-row flex-col shadow-2xl">
       <div class="lg:w-1/2 bg-white text-gray-800 flex flex-col">
         <div class="p-8 shadow-md relative bg-white">
           <div class="flex items-center">
@@ -24,32 +35,32 @@
 
           </div>
           <h1 class="font-medium text-lg mt-6">{{ version.id|upper }}</h1>
-          <p class="text-gray-600 text-sm">{{ version.name }}</p>
+          <p class="text-gray-600 sm:text-3xl lg:text-sm">{{ version.name }}</p>
           <div class="mt-6 flex">
             <div class="relative inline-block text-left">
-                <button class="bg-indigo-500 text-white py-2 text-sm px-3 rounded focus:outline-none dropdown-button"  id="livros" aria-expanded="false" aria-haspopup="false" >{{ book }}</button>
+                <div><button class="bg-indigo-500 text-white py-2 sm:text-3xl lg:text-sm px-3 rounded focus:outline-none dropdown-button"  id="livros" aria-expanded="false" aria-haspopup="false" >{{ book }}</button></div>
                 <div class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="livros" tabindex="-1">
                     <div class="py-1" role="none" id="link-livros">
                     {% for book in books %}
-                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{book.id}}" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}">{{ book.name }}</a>
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{book.id}}" class="text-black-700 block px-4 py-2 sm:text-3xl lg:text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}">{{ book.name }}</a>
                     {% endfor %}
                     </div></div>
             </div>
             
             <div class="relative inline-block text-left">
-                <button class="ml-4 text-gray-600 py-2 text-sm px-3 dropdown-button rounded focus:outline-none border border-gray-400"  id="capitulos" aria-expanded="false" aria-haspopup="false" >{{ chapter }}</button>
+                <div><button class="ml-4 text-gray-600 py-2 sm:text-3xl lg:text-sm px-3 dropdown-button rounded focus:outline-none border border-gray-400"  id="capitulos" aria-expanded="false" aria-haspopup="false" >{{ chapter.number }}</button></div>
                 <div class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="capitulos" tabindex="-1">
                     <div class="py-1" role="none" id="link-capitulos">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     {% for chap in chaps %}
-                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ book.id }}/{{chap.number}}" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}_{{chap.number}}">{{chap.number}}</a>
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ book.id }}/{{chap.number}}" class="text-black-700 block px-4 py-2 sm:text-3xl lg:text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}_{{chap.number}}">{{chap.number}}</a>
                     {% endfor %}
                     </div>
                 </div>
             </div>
 
             <div class="relative ml-auto flex-1 pl-8 sm:block hidden">
-              <input placeholder="Pesquisar em toda bíblia" type="text" class="w-full border rounded border-gray-400 h-full focus:outline-none pl-4 pr-8 text-gray-700 text-sm text-gray-500">
+              <input placeholder="Pesquisar em toda bíblia" type="text" class="w-full border rounded border-gray-400 h-full focus:outline-none pl-4 pr-8 text-gray-700 sm:text-3xl lg:text-sm text-gray-500">
               <svg stroke="currentColor" class="w-4 h-4 absolute right-0 top-0 mt-3 mr-2 text-gray-500" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/>
                 <path d="M21 21l-4.35-4.35"/>
@@ -57,28 +68,28 @@
             </div>
           </div>
         </div>
-        <div class="overflow-auto flex-grow">
+      </div>
+      <div  class="overflow-auto flex-grow">
+      <div>
 
-        {% for annotation in annotations %}
-            <div class="bg-gray-200 px-8 py-6 flex items-center border-b border-gray-300">
-            <div class="flex ml-4">
-                <div class="flex flex-col pl-4 pr-8">
-                <h2 class="font-medium text-sm">{{ annotation.title }}</h2>
-                <h3 class="text-gray-500 text-sm">{{ annotation.content|truncatechars:100 }}</h3>
-                <h3 class="text-gray-500 text-sm mt-2">{{ annotation.start_verse }} - {{ annotation.end_verse }}</h3>
-                </div>
-            </div>
-            <button class="text-gray-500 flex items-center text-sm focus:outline-none rounded ml-auto py-2 leading-none">
-                <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-                </svg>
-                Editar Anotação
-            </button>
-            </div>
-        {% endfor %}
+      {% for annotation in annotations %}
+          <div class="bg-gray-200 px-8 py-6 flex items-center border-b border-gray-300">
+          <div class="flex ml-4">
+              <div class="flex flex-col pl-4 pr-8">
+              <h2 class="font-medium sm:text-3xl lg:text-sm">{{ annotation.title }}</h2>
+              <h3 class="text-gray-500 sm:text-3xl lg:text-sm">{{ annotation.content|truncatechars:100 }}</h3>
+              </div>
+          </div>
+          <button class="text-gray-500 flex items-center sm:text-3xl lg:text-sm focus:outline-none rounded ml-auto py-2 leading-none">
+              <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+              </svg>
+              Editar Anotação
+          </button>
+          </div>
+      {% endfor %}
 
-        </div>
       </div>
       <div class="lg:w-1/2 bg-indigo-600 text-white flex flex-col">
         <div class="p-8 flex flex-1 items-start overflow-auto">
@@ -87,11 +98,11 @@
             {% for verse in verses %}
 
             <div class="flex mb-8">
-                <input id="indigo-checkbox" type="checkbox" value="" class="w-4 h-4 text-indigo-600 bg-black-100 border-black-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-black-800 focus:ring-2 dark:bg-black-700 dark:border-black-600 mr-4 mt-2" value="opcao{{ verse.number }}">
+                {% comment %} <input id="indigo-checkbox" type="checkbox" value="" class="w-4 h-4 text-indigo-600 bg-black-100 border-black-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-black-800 focus:ring-2 dark:bg-black-700 dark:border-black-600 mr-4 mt-2" value="opcao{{ verse.number }}"> {% endcomment %}
               
               <div class="flex-grow">
-                <h3 class="text-sm mb-1">{{ verse.verse }}</h3>
-                <h4 class="text-xs text-indigo-300 italic">{{ verse.chapter }}:{{ verse.number }}</h4>
+                <h3 class="sm:text-3xl lg:text-sm mb-1" id="verse-{{ verse.number }}">{{ verse.verse }}</h3>
+                <h4 class="sm:text-2xl lg:text-xs text-indigo-300 italic" id="verselocal-{{ verse.number }}">{{verse.book}} - {{ verse.chapter.number }}:{{ verse.number }}</h4>
               </div>
               <button class="text-indigo-300 flex-shrink-0 ml-2">
                 <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" viewBox="0 0 24 24">
@@ -105,6 +116,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
   
@@ -123,142 +135,306 @@
         </div>
 
         <div class="p-2 bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex-col">
-            <button class="outline-none focus:outline-none" data-toggle="modal" data-target="#modalNota"><i class="fas fa-pencil-alt text-indigo-600"></i></button>
+            <button class="outline-none focus:outline-none"  id="openModal"><i class="fas fa-pencil-alt text-indigo-600"></i></button>
         </div>
     </div>
   </div>
+  <div class="hidden" id="modal">
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+  
+    <!-- Conteúdo do modal -->
+  <!-- Conteúdo do modal -->
+  <div class="fixed inset-0 flex items-center justify-center h-70">
+  <div class="bg-white rounded-lg p-8 m-4 w-3/4 h-3/4 relative"> <!-- Adicionei a classe relative aqui -->
+      <!-- Botão para fechar o modal no topo como um "X" -->
+      <button class="absolute top-0 right-0 mt-2 mr-4 text-lg font-semibold" id="closeModal">X</button>
+  
+      <div class="mb-4 h-3/4">
+          <input type="text" id="note-title" placeholder="Título da Nota" class="w-full p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+          <!-- Contêiner para o editor -->
+          <div id="toolbar">
+            <span class="ql-formats">
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-code-block"></button>
+              <button class="ql-image"></button>
+            </span>
+            <span class="ql-formats relative inline-block text-left">
+              <button id="bibleVerseListBtn" class="dropdown-button" aria-expanded="false" aria-haspopup="false" >Versículos</button> <!-- Seu botão customizado -->
+            </span>
+            <div id="versesDropdown" class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="bibleVerseListBtn" tabindex="-1">
+              <!-- Os itens do dropdown serão inseridos aqui via JavaScript -->
+            </div>
+          </div>
+          <div id="editor-container" class="h-64 bg-white">
+            <!-- Editor será inicializado aqui -->
+          </div>
+          
+          <!-- Substituído o botão Fechar por Salvar -->
+          <div class="flex justify-center mt-3">
+            <button class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none" id="saveModal">Salvar</button>
+        </div>
+      </div>
+  </div>
+  </div>
+  
+  </div>
+  <script>  // Função para preencher o dropdown de versículos
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  // Funções de Utilidade
-  const toggleDropdown = (buttonId) => {
-    const menuButton = document.getElementById(buttonId);
-    const dropdownMenu = menuButton.nextElementSibling;
-    const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
-    menuButton.setAttribute('aria-expanded', !isExpanded);
-    dropdownMenu.classList.toggle('hidden');
-  };
-
-
-  // Manipuladores de Eventos para Dropdowns
-  ['livros', 'capitulos'].forEach(toggleId => {
-    document.getElementById(toggleId).addEventListener('click', () => toggleDropdown(toggleId));
-  });
-
-  // Lógica para Carregar e Atualizar Livros, Capítulos e Versículos
-  // Considerando que esta lógica é específica e já está bem definida em seu script, não a modifiquei aqui.
-  // Lembre-se de adaptar as chamadas de função e IDs conforme necessário.
-
-
-  // Fechar Dropdowns ao Clicar Fora
-  document.body.addEventListener('click', function (event) {
-    const dropdownButtons = document.querySelectorAll('.dropdown-button');
-    dropdownButtons.forEach(botao => {
-      if (!botao.contains(event.target)) {
-        const dropdown = botao.nextElementSibling;
-        botao.setAttribute('aria-expanded', 'false');
-        dropdown.classList.add('hidden');
-      }
-    });
-  });
-});
-
-        </script>
-                
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-
-                        function obterValorCookie(nome) {
-    let nomeCookie = nome + "=";
-    let cookieDecodificado = decodeURIComponent(document.cookie); // Decodifica a string de cookie
-    let ca = cookieDecodificado.split(';'); // Divide a string em um array de cookies
-
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(nomeCookie) == 0) {
-            return c.substring(nomeCookie.length, c.length);
-        }
+    // Função para mostrar/ocultar o dropdown
+    function toggleDropdownVersiculos() {
+    const dropdown = document.getElementById('versesDropdown');
+    dropdown.classList.toggle('hidden');
+    // Percorre todos os elementos filhos para remover o atributo 'hidden'
+    function removerHidden(elemento) {
+      elemento.classList.toggle("hidden");
+      Array.from(elemento.children).forEach(removerHidden);
     }
-    return "indigo";
-}
-                        const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
-  const themeButtons = document.querySelectorAll("[theme-button]");
-  var valorCookie = obterValorCookie("theme");
-
-  var currTheme = valorCookie;
-
-  const updateDropdownHoverStyles = (theme) => {
-    document.querySelectorAll('.dropdown-menu a, .dropdown-menu li').forEach((link) => {
-      link.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
-      link.classList.add(`hover:bg-${theme}-500`, `hover:text-white`);
+    
+    // Chama a função no elemento selecionado
+    removerHidden(dropdown);
+    //  preencherDropdownVersiculos(); // Chama a função para preencher o dropdown
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+    
+    var quill = new Quill('#editor-container', {
+      modules: {
+        toolbar: '#toolbar' // Referencia a sua barra de ferramentas customizada pelo ID
+      },
+      placeholder: 'Digite o conteúdo da nota aqui...',
+      theme: 'snow'
     });
-
-    document.cookie = `theme=${theme}; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/`;
-
-
-  };
-
-  const changeTheme = (theme) => {
-    allElements.forEach((element) => {
-      const classes = element.getAttribute("class");
-      if (classes) {
-        const newClasses = classes.replace(new RegExp(`\\b${currTheme}\\b`, "g"), theme);
-        element.setAttribute("class", newClasses);
+    
+    
+    function preencherDropdownVersiculos() {
+      const versesDropdown = document.getElementById('versesDropdown');
+      // Limpa o dropdown antes de preencher
+      versesDropdown.innerHTML = '';
+      
+      // Lista de versículos (isso deve ser dinâmico, baseado em sua fonte de dados)
+      const versiculos = [
+      {% for verse in verses %}
+      "{{ verse.number }}"{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ];
+      
+      versiculos.forEach(function(versiculo) {
+        const item = document.createElement('li');
+        item.textContent = versiculo;
+        item.classList.add('dropdown-item', 'w-full', 'text-left', 'px-4', 'py-2',  'sm:text-3xl','lg:text-sm', 'text-gray-700', 'hover:bg-gray-100', 'focus:outline-none');
+        item.addEventListener('click', function() { inserirVersiculoNoQuill(versiculo); });
+        versesDropdown.appendChild(item);
+      });
+    }
+    
+    document.getElementById('openModal').addEventListener('click', preencherDropdownVersiculos);
+    
+    
+    
+    // Função para inserir o versículo selecionado no Quill como bloco de código
+    function inserirVersiculoNoQuill(versiculo) {
+      const range = quill.getSelection(true);
+      var local = document.getElementById('verselocal-'+versiculo).innerHTML
+      versiculo = document.getElementById('verse-'+versiculo).innerHTML
+      versiculo = versiculo+' '+local
+      if (range) {
+          quill.insertText(range.index, `\`\`\`\n${versiculo}\n\`\`\`\n`, 'user');
+          quill.setSelection(range.index + versiculo.length + 8);
       }
+    }
+
+    function saveNote(title, content) {
+ 
+      const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      
+      fetch('{{ request.scheme }}://{{ request.get_host }}/{{ book.id }}/{{ chapter.number }}/create_note/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken // Assegure-se de incluir o token CSRF
+        },
+        body: JSON.stringify({title: title, content: content})
+      })
+      .then(response => {
+        if (response.ok) {
+          return 'good'; // Se a resposta for bem-sucedida, retorna o JSON
+        }
+        throw new Error('Algo deu errado na requisição!'); // Lança um erro se a resposta não for bem-sucedida
+      })
+      .then(data => {
+        // Exibe um toast de sucesso
+        showToast('Nota salva com sucesso!', 'success');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // Exibe um toast de erro
+        showToast('Erro ao salvar a nota. Por favor, tente novamente.', 'error');
+      });
+    }
+    
+    function showToast(message, type) {
+      // Cria o elemento toast
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} flex items-center p-4 mb-4 w-full max-w-xs text-gray-500 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert"`;
+      toast.innerHTML = `
+        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <div class="ml-3 text-sm font-normal">${message}</div>
+        <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+            <span class="sr-only">Fechar</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </button>
+      `;
+      // Adiciona o toast ao body
+      document.body.appendChild(toast);
+    
+      // Remove o toast após 3 segundos
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+    
+      
+      document.getElementById('saveModal').addEventListener('click', function() {
+        var htmlContent = quill.root.innerHTML;
+        var noteTitle = document.getElementById('note-title').value;
+        saveNote(noteTitle, htmlContent); // Função para salvar a nota
+      });
+
+    const toggleDropdown = (buttonId) => {
+      const menuButton = document.getElementById(buttonId);
+      const dropdownMenu = menuButton.parentElement.nextElementSibling;
+      const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', !isExpanded);
+      dropdownMenu.classList.toggle('hidden');
+    };
+    
+    
+      // Adiciona event listeners para cada botão de dropdown
+      ['livros', 'capitulos','bibleVerseListBtn'].forEach(toggleId => {
+      document.getElementById(toggleId).addEventListener('click', () => toggleDropdown(toggleId));
     });
-    updateDropdownHoverStyles(theme);
-    currTheme = theme;
-  };
-
-  themeButtons.forEach((button) => {
-    button.addEventListener("click", (e) => {
-      changeTheme(e.target.getAttribute("theme-button"));
+    
+    // Lógica para Carregar e Atualizar Livros, Capítulos e Versículos
+    // Considerando que esta lógica é específica e já está bem definida em seu script, não a modifiquei aqui.
+    // Lembre-se de adaptar as chamadas de função e IDs conforme necessário.
+    
+    
+    // Fechar Dropdowns ao Clicar Fora
+    document.body.addEventListener('click', function (event) {
+      const dropdownButtons = document.querySelectorAll('.dropdown-button');
+      dropdownButtons.forEach(botao => {
+        if (!botao.contains(event.target)) {
+          const dropdown = botao.parentElement.nextElementSibling;
+          botao.setAttribute('aria-expanded', 'false');
+          dropdown.classList.add('hidden');
+        }
+      });
     });
-  });
-                    });
-
-
-        
-                
-                    
-                    document.addEventListener('DOMContentLoaded', function() {
-
-                        const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
-  const themeButtons = document.querySelectorAll("[theme-button]");
-  var currTheme = "indigo";
-
-  const updateDropdownHoverStyles = (theme) => {
-    document.querySelectorAll('.dropdown-menu a, .dropdown-menu li').forEach((link) => {
-      link.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
-      link.classList.add(`hover:bg-${theme}-500`, `hover:text-white`);
+        // Manipulação do modal
+        const modal = document.getElementById("modal");
+        const openModalBtn = document.getElementById("openModal");
+        const closeModalBtn = document.getElementById("closeModal");
+      
+        // Abrir modal
+        openModalBtn.onclick = function() {
+          modal.style.display = "block";
+        };
+      
+        // Fechar modal
+        closeModalBtn.onclick = function() {
+          modal.style.display = "none";
+        };
+      
+        // Fechar modal ao clicar fora dele
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        };
     });
-  };
-
-  const changeTheme = (theme) => {
-    allElements.forEach((element) => {
-      const classes = element.getAttribute("class");
-      if (classes) {
-        const newClasses = classes.replace(new RegExp(`\\b${currTheme}\\b`, "g"), theme);
-        element.setAttribute("class", newClasses);
+    
+          </script>
+                  
+    
+                  <script>
+                      document.addEventListener('DOMContentLoaded', function () {
+    
+                          function obterValorCookie(nome) {
+      let nomeCookie = nome + "=";
+      let cookieDecodificado = decodeURIComponent(document.cookie); // Decodifica a string de cookie
+      let ca = cookieDecodificado.split(';'); // Divide a string em um array de cookies
+    
+      for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+          }
+          if (c.indexOf(nomeCookie) == 0) {
+              return c.substring(nomeCookie.length, c.length);
+          }
       }
+      return "indigo";
+    }
+    const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
+    const themeButtons = document.querySelectorAll("[theme-button]");
+    var valorCookie = obterValorCookie("theme");
+    
+    var currTheme = valorCookie;
+    
+    const updateDropdownHoverStyles = (theme) => {
+      document.querySelectorAll('.dropdown-menu a, .dropdown-menu li').forEach((link) => {
+        link.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
+        link.classList.add(`hover:bg-${theme}-500`, `hover:text-white`);
+      });
+    
+      document.cookie = `theme=${theme}; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/`;
+    
+    
+    };
+    
+    const changeTheme = (theme) => {
+      allElements.forEach((element) => {
+        const classes = element.getAttribute("class");
+        if (classes) {
+          const newClasses = classes.replace(new RegExp(`\\b${currTheme}\\b`, "g"), theme);
+          element.setAttribute("class", newClasses);
+        }
+      });
+      updateDropdownHoverStyles(theme);
+      currTheme = theme;
+    };
+    
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        changeTheme(e.target.getAttribute("theme-button"));
+      });
     });
-    updateDropdownHoverStyles(theme);
-    currTheme = theme;
-  };
 
-  themeButtons.forEach((button) => {
-    button.addEventListener("click", (e) => {
-      changeTheme(e.target.getAttribute("theme-button"));
+    
+    var currTheme = "indigo";
+    
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        changeTheme(e.target.getAttribute("theme-button"));
+      });
     });
-  });
-                  // Ouvinte de eventos para os links de livros
-                    })
-                
-                    </script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  // Ouvinte de eventos para os links de livros
+
+
+  })
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
                     
 </body>

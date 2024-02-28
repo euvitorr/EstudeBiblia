@@ -5,6 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 class Note(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()  # Armazena HTML
+    version = models.ForeignKey('biblia.Version', on_delete=models.CASCADE,null=True)  # Importação do app 'biblia'
+    book = models.ForeignKey('biblia.Book', on_delete=models.CASCADE, related_name='start_ranges',null=True)
+    chapter = models.ForeignKey('biblia.Chapter', on_delete=models.CASCADE,null=True) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -14,16 +17,4 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
-
-class AnnotationRange(models.Model):
-    note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='ranges')
-    version = models.ForeignKey('biblia.Version', on_delete=models.CASCADE)  # Importação do app 'biblia'
-    start_book = models.ForeignKey('biblia.Book', on_delete=models.CASCADE, related_name='start_ranges')
-    start_chapter = models.IntegerField()
-    start_verse = models.IntegerField()
-    end_book = models.ForeignKey('biblia.Book', on_delete=models.CASCADE, related_name='end_ranges')
-    end_chapter = models.IntegerField()
-    end_verse = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.start_book.name} {self.start_chapter}:{self.start_verse} - {self.end_book.name} {self.end_chapter}:{self.end_verse}"
+        

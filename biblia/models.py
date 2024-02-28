@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q, CheckConstraint
 
 class Book(models.Model):
     id = models.CharField(max_length=11, primary_key=True)
@@ -26,12 +27,18 @@ class Version(models.Model):
     def __str__(self):
         return self.name
 
+
 class Verse(models.Model):
     version = models.ForeignKey(Version, on_delete=models.CASCADE, related_name='verses')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='verses')
-    chapter = models.IntegerField()
+    chapter = models.ForeignKey('Chapter', on_delete=models.CASCADE, related_name='verses', null=True) 
     number = models.IntegerField()
     verse = models.TextField()
 
+    class Meta:
+        constraints = [
+            CheckConstraint(check=Q(book=('chapter__book')), name='chapter_belongs_to_book')
+        ]
+
     def __str__(self):
-        return f"{self.book.name} {self.chapter}:{self.number} - {self.verse[:30]}..."
+        return f"{self.book.name} {self.chapter.number}:{self.number} - {self.verse[:30]}..."
