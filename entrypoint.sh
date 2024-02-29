@@ -7,6 +7,11 @@ while ! nc -z db 3306; do
 done
 echo "Banco de dados pronto!"
 
+# Cria o usuário e concede privilégios totais
+echo "Criando usuário de banco de dados e concedendo privilégios..."
+mysql -u root -p -h db -e "CREATE USER 'euvitorr'@'%' IDENTIFIED BY 'euvitorr'; GRANT ALL PRIVILEGES ON * . * TO 'euvitorr'@'%'; FLUSH PRIVILEGES;"
+
+
 # Aplica migrações
 echo "Aplicando migrações..."
 python manage.py migrate

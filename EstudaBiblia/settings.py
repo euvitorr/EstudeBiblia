@@ -82,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bible',
-        'USER': 'root',
-        'PASSWORD': '',
+        'USER': 'euvitorr',
+        'PASSWORD': 'euvitorr',
         'HOST': 'db',  # Nome do serviço no docker-compose
         'PORT': '3306',
         'OPTIONS': {
