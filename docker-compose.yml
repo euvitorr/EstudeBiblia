@@ -2,6 +2,7 @@ version: '3.8'
 services:
   web:
     build: .
+    image: euvitorr/estuda-biblia-web:latest
     command: ["/entrypoint.sh"]
     volumes:
       - .:/app
