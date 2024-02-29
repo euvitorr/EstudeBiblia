@@ -7,14 +7,13 @@ while ! nc -z db 3306; do
 done
 echo "Banco de dados pronto!"
 
-# Cria o banco de dados se ele ainda não existir
-echo "Criando o banco de dados se ele ainda não existir..."
-mysql -u root -p -h db -e "CREATE DATABASE IF NOT EXISTS biblia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Cria o usuário e concede privilégios totais
 echo "Criando usuário de banco de dados e concedendo privilégios..."
-mysql -u root -p -h db -e "CREATE USER IF NOT EXISTS 'euvitorr'@'%' IDENTIFIED BY 'euvitorr'; GRANT ALL PRIVILEGES ON biblia.* TO 'euvitorr'@'%'; FLUSH PRIVILEGES;"
+mysql -u root -p -h db -e "CREATE USER IF NOT EXISTS 'euvitorr'@'%' IDENTIFIED BY 'euvitorr'; FLUSH PRIVILEGES;"
 
+echo "Criando o banco de dados se ele ainda não existir..."
+mysql -u euvitorr -peuvitorr -h db -e "CREATE DATABASE IF NOT EXISTS biblia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Aplica migrações
 echo "Aplicando migrações..."
