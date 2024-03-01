@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     pkg-config \
     gcc \
+    netcat-openbsd \
+    default-mysql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
