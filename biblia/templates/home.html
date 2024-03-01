@@ -69,27 +69,75 @@
           </div>
         </div>
       </div>
-      <div  class="overflow-auto flex-grow">
-      <div>
+      <div  class="overflow-auto flex-grow hidden lg:block">
+        <div>
 
-      {% for annotation in annotations %}
-          <div class="bg-gray-200 px-8 py-6 flex items-center border-b border-gray-300">
-          <div class="flex ml-4">
-              <div class="flex flex-col pl-4 pr-8">
-              <h2 class="font-medium sm:text-3xl lg:text-sm">{{ annotation.title }}</h2>
-              <h3 class="text-gray-500 sm:text-3xl lg:text-sm">{{ annotation.content|truncatechars:100 }}</h3>
+              {% for annotation in annotations %}
+                  <div class="bg-gray-200 px-8 py-6 flex items-center border-b border-gray-300">
+                  <div class="flex ml-4">
+                      <div class="flex flex-col pl-4 pr-8">
+                      <h2 class="font-medium sm:text-3xl lg:text-sm">{{ annotation.title }}</h2>
+                      <h3 class="text-gray-500 sm:text-3xl lg:text-sm">{{ annotation.content|truncatechars:100 }}</h3>
+                      </div>
+                  </div>
+                  <button class="text-gray-500 flex items-center sm:text-3xl lg:text-sm focus:outline-none rounded ml-auto py-2 leading-none">
+                      <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                      </svg>
+                      Editar Anotação
+                  </button>
+                  </div>
+              {% endfor %}
+        </div> 
+      </div>
+
+      <div class="lg:w-1/2 bg-indigo-600 text-white flex flex-col hidden lg:block">
+        <div class="p-8 flex flex-1 items-start overflow-auto">
+          <div class="flex-1 pl-10"><form id = 'formNote'>
+
+            {% for verse in verses %}
+
+            <div class="flex mb-8">
+                {% comment %} <input id="indigo-checkbox" type="checkbox" value="" class="w-4 h-4 text-indigo-600 bg-black-100 border-black-300 rounded focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-black-800 focus:ring-2 dark:bg-black-700 dark:border-black-600 mr-4 mt-2" value="opcao{{ verse.number }}"> {% endcomment %}
+              
+              <div class="flex-grow">
+                <h3 class="sm:text-3xl lg:text-sm mb-1" id="verse-{{ verse.number }}">{{ verse.verse }}</h3>
+                <h4 class="sm:text-2xl lg:text-xs text-indigo-300 italic" id="verselocal-{{ verse.number }}">{{verse.book}} - {{ verse.chapter.number }}:{{ verse.number }}</h4>
               </div>
+              <button class="text-indigo-300 flex-shrink-0 ml-2">
+                <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="1"/>
+                  <circle cx="19" cy="12" r="1"/>
+                  <circle cx="5" cy="12" r="1"/>
+                </svg>
+              </button>
+            </div>
+            {% endfor %} </form>
           </div>
-          <button class="text-gray-500 flex items-center sm:text-3xl lg:text-sm focus:outline-none rounded ml-auto py-2 leading-none">
-              <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-              </svg>
-              Editar Anotação
-          </button>
-          </div>
-      {% endfor %}
+        </div>
+      </div>
 
+      <div  class="overflow-auto flex-grow lg:hidden">
+        <div>
+
+              {% for annotation in annotations %}
+                  <div class="bg-gray-200 px-8 py-6 flex items-center border-b border-gray-300">
+                  <div class="flex ml-4">
+                      <div class="flex flex-col pl-4 pr-8">
+                      <h2 class="font-medium sm:text-3xl lg:text-sm">{{ annotation.title }}</h2>
+                      <h3 class="text-gray-500 sm:text-3xl lg:text-sm">{{ annotation.content|truncatechars:100 }}</h3>
+                      </div>
+                  </div>
+                  <button class="text-gray-500 flex items-center sm:text-3xl lg:text-sm focus:outline-none rounded ml-auto py-2 leading-none">
+                      <svg stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                      </svg>
+                      Editar Anotação
+                  </button>
+                  </div>
+              {% endfor %} 
       </div>
       <div class="lg:w-1/2 bg-indigo-600 text-white flex flex-col">
         <div class="p-8 flex flex-1 items-start overflow-auto">
