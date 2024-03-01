@@ -13,7 +13,7 @@ echo "Criando usuário de banco de dados e concedendo privilégios..."
 mysql -u root -p -h db -e "CREATE USER IF NOT EXISTS 'euvitorr'@'%' IDENTIFIED BY 'euvitorr'; FLUSH PRIVILEGES;"
 
 echo "Criando o banco de dados se ele ainda não existir..."
-mysql -u euvitorr -peuvitorr -h db -e "CREATE DATABASE IF NOT EXISTS biblia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u euvitorr -peuvitorr -h db -e "CREATE DATABASE IF NOT EXISTS bible CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Aplica migrações
 echo "Aplicando migrações..."

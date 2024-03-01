@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'EstudaBiblia.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'biblia',
+        'NAME': 'bible',
         'USER': 'euvitorr',
         'PASSWORD': 'euvitorr',
         'HOST': 'db',  # Nome do serviço no docker-compose
