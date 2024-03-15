@@ -6,33 +6,40 @@ from django.db.models import Min, Max
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-@csrf_exempt
-def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao ='nvi'):
+# Removido @csrf_exempt para enfatizar a segurança - reinstale com cautela
+def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao='nvi'):
     if request.method == 'POST':
+        # Garantir que o usuário está autenticado
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'error', 'message': 'Usuário não autenticado'}, status=403)
+
         # Carregando os dados da requisição
         data = json.loads(request.body)
         title = data.get('title')
         content = data.get('content')
 
-    
-        livro = Book.objects.get(id=id_livro)
+        try:
+            livro = Book.objects.get(id=id_livro)
+            capitulo = Chapter.objects.get(number=id_capitulo, book=livro)
+            versao = Version.objects.get(id=id_versao)
 
-        capitulo = Chapter.objects.get(number = id_capitulo,book=livro)
-        
-        versao = Version.objects.get(id=id_versao)
-        # Criar a nota associada ao livro e capítulo
-        note = Note.objects.create(
-            title = title,
-            content = content,
-            version = versao,
-            book = livro,  # Assumindo que você tem um campo 'book' em Note
-            chapter = capitulo  # Assumindo que você tem um campo 'chapter' em Note
-        )
+            # Criar a nota associada ao usuário logado, livro, capítulo e versão
+            note = Note.objects.create(
+                user = request.user,  # Associa a nota ao usuário logado
+                title = title,
+                content = content,
+                version = versao,
+                book = livro,
+                chapter = capitulo
+            )
 
+            return JsonResponse({'status': 'success', 'note_id': note.id})
+        except (Book.DoesNotExist, Chapter.DoesNotExist, Version.DoesNotExist) as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=404)
 
-        return JsonResponse({'status': 'success', 'note_id': title})
     else:
-        return JsonResponse({'status': 'error'})
+        return JsonResponse({'status': 'error', 'message': 'Método não suportado'}, status=405)
+
 
 
 def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
@@ -73,7 +80,6 @@ def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
         chapter=capitulo
     ).distinct()
 
-
     context = {
         'verses': verses,
         'version': version,
@@ -83,7 +89,8 @@ def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
         'verses_max': verses_max,
         'annotations': annotations,
         'books': books,
-        'chaps': chaps
+        'chaps': chaps,
+        'user': request.user  # Adiciona o usuário logado ao contexto
     }
 
     # Criar a resposta renderizada

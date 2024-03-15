@@ -24,14 +24,21 @@
   <div class="container mx-auto h-screen py-16 px-8 relative">
     <div class="flex w-full rounded-lg h-[90vh] lg:overflow-hidden lg:flex-row flex-col shadow-2xl">
       <div class="lg:w-1/2 bg-white text-gray-800 flex flex-col">
-        <div class="p-8 shadow-md relative bg-white">
+        {% if not user.is_authenticated %}
+        <div class="relative bg-white">
           <div class="flex items-center">
-            <img src="https://randomuser.me/api/portraits/men/1.jpg" class="w-10 h-10 block rounded object-cover object-top" />
-            <div class="text-indigo-600 font-medium ml-3">Vitor Rios Rodrigues</div>
-
-
-
+            <a href="{% url 'login' %}" class="inline-block bg-indigo-400 text-white w-1/2 py-2 px-4 rounded-md focus:outline-none inline-flex items-center justify-center rounded-none">Realizar login</a>
+            <a href="{% url 'cadastro' %}" class="inline-block bg-indigo-300 text-white w-1/2 py-2 px-4 rounded-md focus:outline-none inline-flex items-center justify-center rounded-none">Quero me cadastrar</a>
           </div>
+        </div>
+        {% endif %}
+        <div class="px-8 pb-8 pt-3 shadow-md relative bg-white">
+          {% if user.is_authenticated  %}
+          <div class="flex items-center">
+              <img src="https://randomuser.me/api/portraits/men/1.jpg" class="w-10 h-10 block rounded object-cover object-top" />
+              <div class="text-indigo-600 font-medium ml-3">Olá exegeta, {{ user.nome }}!</div>
+            </div>
+            {% endif %}
           <h1 class="font-medium text-lg mt-6">{{ version.id|upper }}</h1>
           <p class="text-gray-600 sm:text-3xl lg:text-sm">{{ version.name }}</p>
           <div class="mt-6 flex">

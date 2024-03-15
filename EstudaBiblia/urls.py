@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path  # Importando path para usar no lugar de url, se você estiver usando Django >= 2.0
+from django.urls import include, path # Importando path para usar no lugar de url, se você estiver usando Django >= 2.0
 
 from biblia import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    path('usuarios/', include('usuarios.urls')),
     # Rota sem parâmetros: usar valores padrão
     # Rota com parâmetros
     path('', views.home, name='home_without_params'),

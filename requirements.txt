@@ -1,2 +1,4 @@
 Django>=3.0,<4.0
 mysqlclient
+django-allauth==0.45.0  # Use a versão mais recente ou a que for compatível com seu projeto
+Pillow>=8.0.0

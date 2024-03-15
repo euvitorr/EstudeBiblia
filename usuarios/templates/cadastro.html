@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+    <div class="flex items-center justify-center min-h-screen bg-indigo-400">
+        <div class="w-full max-w-lg p-8 space-y-3 rounded-lg bg-white shadow-lg">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-indigo-600">Crie sua conta</h2>
+                <p class="text-sm text-indigo-500">Preencha os dados para se cadastrar.</p>
+            </div>
+            <form action="" method="post" class="space-y-6" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Usuário</label>
+                    <input type="text" name="username" id="username" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
+                    <input type="password" name="password" id="password" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <!-- Adicione mais campos conforme necessário, por exemplo: -->
+                
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Nome</label>
+                    <input type="text" name="name" id="name" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+
+                <div>
+                    <label for="data_nascimento" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
+                    <input type="date" name="data_nascimento" id="data_nascimento" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <div>
+                    <label for="foto_perfil" class="block text-sm font-medium text-gray-700">Foto de Perfil</label>
+                    <input type="file" name="foto_perfil" id="foto_perfil" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <!-- Continue adicionando os outros campos de endereço -->
+                <div>
+                    <button type="submit" class="w-full py-2 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cadastrar</button>
+                </div>
+            </form>
+            <div class="text-sm text-center">
+                <p class="text-indigo-600">Já tem uma conta? <a href="/login/" class="font-medium text-indigo-500 hover:underline">Entrar</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
