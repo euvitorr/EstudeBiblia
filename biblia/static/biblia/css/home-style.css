@@ -1,0 +1,6 @@
+.dropdown-menu {
+    z-index: 1050; /* Valor exemplo, ajuste conforme necessário */
+    }
+.modal {
+    z-index: 1000; /* Valor exemplo, certifique-se de que é menor que o do dropdown */
+}

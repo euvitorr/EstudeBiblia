@@ -105,6 +105,7 @@ DATABASES = {
         },
     }
 }
+AUTH_USER_MODEL = 'usuarios.CustomUser'
 
 
 # Password validation

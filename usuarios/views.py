@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -10,10 +11,10 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('nome_da_url_para_redirecionar_apos_login')
+            return redirect('home_without_params')
         else:
-            # Mensagem de erro
-            pass
+            messages.error(request, "Seu nome de usuário ou senha estão incorretos")
+            return redirect('login')
     return render(request, 'login.html')
 
 def cadastro_view(request):
@@ -32,7 +33,7 @@ def atualizar_perfil_view(request):
         form = UserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('nome_da_url_para_redirecionar_apos_atualizacao')
+            return redirect('home')
     else:
         form = UserChangeForm(instance=request.user)
     return render(request, 'atualizar_perfil.html', {'form': form})

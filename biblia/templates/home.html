@@ -1,3 +1,5 @@
+{% load static %}
+
 <header><script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -13,7 +15,26 @@
     
     </style>
     <meta name="csrf-token" content="{{ csrf_token }}">
-</header><body>
+</header>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>
+    Exegeta
+  </title>
+  <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="{% static 'biblia/css/home-style.css' %}" rel="stylesheet">
+</head>
+
+
+<body>
     <div class="h-screen w-screen bg-indigo-400 overflow-hidden absolute flex items-center">
     <div class="w-screen h-64 absolute top-0 opacity-50 left-0 -my-40 -mx-64 bg-indigo-300 rounded-full"></div>
     <div class="w-64 h-64 -mx-32 bg-indigo-300 opacity-50 rounded-full"></div>
@@ -36,11 +57,20 @@
           {% if user.is_authenticated  %}
           <div class="flex items-center">
               <img src="https://randomuser.me/api/portraits/men/1.jpg" class="w-10 h-10 block rounded object-cover object-top" />
-              <div class="text-indigo-600 font-medium ml-3">Olá exegeta, {{ user.nome }}!</div>
+              <div class="text-indigo-600 font-medium ml-3">{{ user.nome }}</div>
             </div>
             {% endif %}
-          <h1 class="font-medium text-lg mt-6">{{ version.id|upper }}</h1>
-          <p class="text-gray-600 sm:text-3xl lg:text-sm">{{ version.name }}</p>
+        <div id="dropdownButton" class="pt-3 relative cursor-pointer">
+            <h1 class="font-medium text-lg mt-6" id="versionId">{{ version.id|upper }}</h1>
+            <p class="text-gray-600 sm:text-3xl lg:text-sm" id="versionName">{{ version.name }}</p>
+        </div>
+        
+        <!-- Conteúdo Dropdown -->
+        <div id="versionDropdown" class="hidden overflow-y-auto max-h-80 absolute mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu">
+            {% for v in versions %}
+            <a href="#" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500 hover:text-white" onclick="changeVersion('{{ v.id }}', '{{ v.name|escapejs }}'); event.preventDefault();">{{ v.name }}</a>
+            {% endfor %}
+        </div>
           <div class="mt-6 flex">
             <div class="relative inline-block text-left">
                 <div><button class="bg-indigo-500 text-white py-2 sm:text-3xl lg:text-sm px-3 rounded focus:outline-none dropdown-button"  id="livros" aria-expanded="false" aria-haspopup="false" >{{ book }}</button></div>
@@ -186,10 +216,11 @@
         <button class="bg-purple-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="purple"></button>
         <button class="bg-pink-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full outline-none focus:outline-none" theme-button="pink"></button>
         </div>
-
+        {% if user.is_authenticated  %}
         <div class="sm:p-4 lg:p-2 bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex-col">
             <button class="outline-none focus:outline-none"  id="openModal"><i class="fas fa-pencil-alt sm:text-4xl lg:text-sm text-indigo-600"></i></button>
         </div>
+        {% endif %}
     </div>
   </div>
   <div class="hidden" id="modal">
@@ -204,7 +235,7 @@
       <button class="absolute top-0 right-0 mt-2 mr-4 text-lg font-semibold" id="closeModal">X</button>
   
       <div class="mb-4 sm:h-[65vh] lg:h-3/4">
-          <input type="text" id="note-title" placeholder="Título da Nota" class="w-full p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+          <input type="text" id="note-title" required placeholder="Título da Nota" class="w-full p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
           <!-- Contêiner para o editor -->
           <div id="toolbar">
             <span class="ql-formats">
@@ -223,7 +254,7 @@
             <span class="ql-formats relative inline-block text-left">
               <button id="bibleVerseListBtn" class="dropdown-button" aria-expanded="false" aria-haspopup="false" >Versículos</button> <!-- Seu botão customizado -->
             </span>
-            <div id="versesDropdown" class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="bibleVerseListBtn" tabindex="-1">
+            <div id="versesDropdown" class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-80 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="bibleVerseListBtn" tabindex="-1">
               <!-- Os itens do dropdown serão inseridos aqui via JavaScript -->
             </div>
           </div>
@@ -280,11 +311,14 @@
       {% endfor %}
     ];
       
-      versiculos.forEach(function(versiculo) {
-        const item = document.createElement('li');
+      versiculos.forEach(function(versiculo_ref) {
+        const item = document.createElement('a');
+        var local = document.getElementById('verselocal-'+versiculo_ref).innerHTML
+        versiculo = document.getElementById('verse-'+versiculo_ref).innerHTML
+        versiculo = versiculo+' '+local
         item.textContent = versiculo;
-        item.classList.add('dropdown-item', 'w-full', 'text-left', 'px-4', 'py-2',  'sm:text-3xl','lg:text-sm', 'text-gray-700', 'hover:bg-gray-100', 'focus:outline-none');
-        item.addEventListener('click', function() { inserirVersiculoNoQuill(versiculo); });
+        item.classList.add('dropdown-item', 'w-full','block', 'text-left', 'px-4', 'py-2',  'sm:text-3xl','lg:text-sm', 'text-black-700', 'hover:bg-indigo-500','hover:text-white', 'focus:outline-none');
+        item.addEventListener('click', function() { inserirVersiculoNoQuill(versiculo_ref); });
         versesDropdown.appendChild(item);
       });
     }
@@ -484,7 +518,21 @@
     });
   // Ouvinte de eventos para os links de livros
 
+  const dropdownButton = document.getElementById('dropdownButton');
+  const versionDropdown = document.getElementById('versionDropdown');
+  
+  // Função para alternar a visibilidade do dropdown
+  dropdownButton.addEventListener('click', function() {
+      versionDropdown.classList.toggle('hidden');
+  });
 
+  window.changeVersion = function(versionId, versionName) {
+      document.getElementById('versionId').textContent = versionId.toUpperCase();
+      document.getElementById('versionName').textContent = versionName;
+      
+      // Fecha o dropdown após selecionar uma versão
+      versionDropdown.classList.add('hidden');
+  };
   })
 
 </script>

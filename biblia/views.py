@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Removido @csrf_exempt para enfatizar a segurança - reinstale com cautela
-def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao='nvi'):
+def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao=None):
     if request.method == 'POST':
         # Garantir que o usuário está autenticado
         if not request.user.is_authenticated:
@@ -42,7 +42,7 @@ def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao='nvi'):
 
 
 
-def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
+def home(request, id_livro = None, id_capitulo = None, id_versao = None):
 
     if id_livro != None and id_capitulo == None:
         id_capitulo = 1
@@ -50,7 +50,7 @@ def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
         id_capitulo = id_capitulo or request.COOKIES.get('capitulo', 1)
     # Parâmetros que podem ser passados via URL ou como parâmetros GET
     id_livro = id_livro or request.COOKIES.get('livro', 'gn')
-    
+    id_versao = id_versao or request.COOKIES.get('versao', 'nvi')
     
     nome_livro = request.GET.get('livro', id_livro)  # Exemplo: 'João'
     id_versao = request.GET.get('versao', id_versao)  # Exemplo: 'nvi'
@@ -64,7 +64,7 @@ def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
     chaps = Chapter.objects.filter(book=book)
     # Buscar o objeto da versão especificada, ou padrão se não especificado
     version = get_object_or_404(Version, id=id_versao)
-    
+    versions = Version.objects.all()
     capitulo = get_object_or_404(Chapter, number=id_capitulo,book=book)
     # Buscar todos os versículos do capítulo especificado na versão especificada
     verses = Verse.objects.filter(book=book, chapter=capitulo, version=version)
@@ -90,6 +90,7 @@ def home(request, id_livro=None, id_capitulo=None, id_versao = 'NVI'):
         'annotations': annotations,
         'books': books,
         'chaps': chaps,
+        'versions':versions,
         'user': request.user  # Adiciona o usuário logado ao contexto
     }
 
