@@ -77,7 +77,7 @@
                 <div class="overflow-y-auto max-h-80 absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white dropdown-menu shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="livros" tabindex="-1">
                     <div class="py-1" role="none" id="link-livros">
                     {% for book in books %}
-                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{book.id}}" class="text-black-700 block px-4 py-2 sm:text-3xl lg:text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}">{{ book.name }}</a>
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ version.id }}/{{book.id}}" class="text-black-700 block px-4 py-2 sm:text-3xl lg:text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}">{{ book.name }}</a>
                     {% endfor %}
                     </div></div>
             </div>
@@ -88,7 +88,7 @@
                     <div class="py-1" role="none" id="link-capitulos">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                     {% for chap in chaps %}
-                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ book.id }}/{{chap.number}}" class="text-black-700 block px-4 py-2 sm:text-3xl lg:text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}_{{chap.number}}">{{chap.number}}</a>
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ version.id }}/{{ book.id }}/{{chap.number}}" class="text-black-700 block px-4 py-2 sm:text-3xl lg:text-sm hover:bg-indigo-500  hover:text-white" role="menuitem" tabindex="-1" id = "{{ book.id }}_{{chap.number}}">{{chap.number}}</a>
                     {% endfor %}
                     </div>
                 </div>
@@ -343,7 +343,7 @@
  
       const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
       
-      fetch('{{ request.scheme }}://{{ request.get_host }}/{{ book.id }}/{{ chapter.number }}/create_note/', {
+      fetch('{{ request.scheme }}://{{ request.get_host }}/{{ version.id }}/{{ book.id }}/{{ chapter.number }}/create_note/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
