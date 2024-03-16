@@ -68,7 +68,7 @@
         <!-- Conteúdo Dropdown -->
         <div id="versionDropdown" class="hidden overflow-y-auto max-h-80 absolute mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu">
             {% for v in versions %}
-            <a href="{{ request.scheme }}://{{ request.get_host }}/{{ version.id }}"" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500 hover:text-white" onclick="changeVersion('{{ v.id }}', '{{ v.name|escapejs }}'); event.preventDefault();">{{ v.name }}</a>
+            <a href="{{ request.scheme }}://{{ request.get_host }}/{{ v.id }}" class="text-black-700 block px-4 py-2 text-sm hover:bg-indigo-500 hover:text-white" onclick="changeVersion('{{ v.id }}', '{{ v.name|escapejs }}'); event.preventDefault();">{{ v.name }}</a>
             {% endfor %}
         </div>
           <div class="mt-6 flex">
