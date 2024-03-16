@@ -18,41 +18,13 @@
             </div>
             <form action="" method="post" class="space-y-6" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Usuário</label>
-                    <input type="text" name="username" id="username" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-                </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="email" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-                </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
-                    <input type="password" name="password" id="password" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-                </div>
-                <!-- Adicione mais campos conforme necessário, por exemplo: -->
-                
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Nome</label>
-                    <input type="text" name="name" id="name" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-                </div>
-
-                <div>
-                    <label for="data_nascimento" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
-                    <input type="date" name="data_nascimento" id="data_nascimento" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <div>
-                    <label for="foto_perfil" class="block text-sm font-medium text-gray-700">Foto de Perfil</label>
-                    <input type="file" name="foto_perfil" id="foto_perfil" class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                <!-- Continue adicionando os outros campos de endereço -->
+                {{ form.as_p }}
                 <div>
                     <button type="submit" class="w-full py-2 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Cadastrar</button>
                 </div>
             </form>
             <div class="text-sm text-center">
-                <p class="text-indigo-600">Já tem uma conta? <a href="/login/" class="font-medium text-indigo-500 hover:underline">Entrar</a></p>
+                <p class="text-indigo-600">Já tem uma conta? <a href="../login/" class="font-medium text-indigo-500 hover:underline">Entrar</a></p>
             </div>
         </div>
     </div>

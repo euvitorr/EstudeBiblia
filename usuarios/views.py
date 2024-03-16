@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required
@@ -19,12 +20,12 @@ def login_view(request):
 
 def cadastro_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('login')  # Certifique-se de que 'login' é o nome correto da sua URL de login
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'cadastro.html', {'form': form})
 
 @login_required
