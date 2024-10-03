@@ -1,16 +1,15 @@
 #!/bin/bash
 
-# Espera o banco de dados ficar pronto (ajuste conforme necessário)
+# Espera o banco de dados ficar pronto
 echo "Aguardando o banco de dados ficar pronto..."
 while ! nc -z db 3306; do   
   sleep 1
 done
 echo "Banco de dados pronto!"
 
-
 # Cria o usuário e concede privilégios totais
 echo "Criando usuário de banco de dados e concedendo privilégios..."
-mysql -u root -p -h db -e "CREATE USER IF NOT EXISTS 'euvitorr'@'%' IDENTIFIED BY 'euvitorr'; FLUSH PRIVILEGES;"
+mysql -u root -p'senha123' -h db -e "CREATE USER IF NOT EXISTS 'euvitorr'@'%' IDENTIFIED BY 'euvitorr'; FLUSH PRIVILEGES;"
 
 echo "Criando o banco de dados se ele ainda não existir..."
 mysql -u euvitorr -peuvitorr -h db -e "CREATE DATABASE IF NOT EXISTS bible CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
@@ -36,7 +35,6 @@ if [ "$SUPERUSER_EXISTS" = "False" ]; then
 else
     echo "Superusuário já existe."
 fi
-
 
 # Inicia o servidor de aplicação
 echo "Iniciando o servidor de aplicação..."
