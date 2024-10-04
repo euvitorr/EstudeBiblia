@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.apple',
+    'rest_framework',
     'biblia',
     'anotacoes',
-    'usuarios'
+    'usuarios',
 ]
 
 MIDDLEWARE = [

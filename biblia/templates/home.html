@@ -31,6 +31,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link href="{% static 'biblia/css/home-style.css' %}" rel="stylesheet">
+<script>
+ 
+</script>
 </head>
 
 
@@ -205,22 +208,30 @@
   
   <div class="fixed h-screen right-0 top-0 items-center flex">
     <div>
+        <!-- Contêiner para botões de fonte -->
+        <div class="bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 flex-col items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex">
+            <button id="increaseFont" class=" w-10 h-10 rounded-full mb-4 outline-none focus:outline-none text-indigo-600">A+</button>
+            <button id="decreaseFont" class=" w-10 h-10 rounded-full outline-none focus:outline-none text-indigo-600">A-</button>
+        </div>
+
+        <!-- Contêiner para botões de tema -->
         <div class="sm:p-4 lg:p-2 bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 inline-flex items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex-col">
-        <button class="bg-gray-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="gray"></button>
-        <button class="bg-red-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="red"></button>
-        <button class="bg-orange-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="orange"></button>
-        <button class="bg-green-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="green"></button>
-        <button class="bg-teal-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="teal"></button>
-        <button class="bg-blue-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="blue"></button>
-        <button class="bg-indigo-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="indigo"></button>
-        <button class="bg-purple-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="purple"></button>
-        <button class="bg-pink-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full outline-none focus:outline-none" theme-button="pink"></button>
+            <button class="bg-gray-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="gray"></button>
+            <button class="bg-red-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="red"></button>
+            <button class="bg-orange-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="orange"></button>
+            <button class="bg-green-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="green"></button>
+            <button class="bg-teal-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="teal"></button>
+            <button class="bg-blue-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="blue"></button>
+            <button class="bg-indigo-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="indigo"></button>
+            <button class="bg-purple-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full sm:mb-4 lg:mb-2 outline-none focus:outline-none" theme-button="purple"></button>
+            <button class="bg-pink-500 sm:w-10 sm:h-10 lg:w-5 lg:h-5 rounded-full outline-none focus:outline-none" theme-button="pink"></button>
         </div>
-        
+
+        <!-- Contêiner para botão de modal -->
         <div class="sm:p-4 lg:p-2 bg-white border-l-4 border-t-4 border-b-4 border-indigo-400 {% if not user.is_authenticated %} hidden {% endif %} items-center rounded-tl-lg shadow-2xl rounded-bl-lg z-10 flex-col">
-            <button class="outline-none focus:outline-none  "  id="openModal"><i class="fas fa-pencil-alt sm:text-4xl lg:text-sm text-indigo-600"></i></button>
+            <button class="outline-none focus:outline-none" id="openModal"><i class="fas fa-pencil-alt sm:text-4xl lg:text-sm text-indigo-600"></i></button>
         </div>
-        
+
     </div>
   </div>
   <div class="hidden" id="modal">
@@ -455,67 +466,62 @@
                   
     
                   <script>
-                      document.addEventListener('DOMContentLoaded', function () {
-    
-                          function obterValorCookie(nome) {
-      let nomeCookie = nome + "=";
-      let cookieDecodificado = decodeURIComponent(document.cookie); // Decodifica a string de cookie
-      let ca = cookieDecodificado.split(';'); // Divide a string em um array de cookies
-    
-      for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-              c = c.substring(1);
-          }
-          if (c.indexOf(nomeCookie) == 0) {
-              return c.substring(nomeCookie.length, c.length);
-          }
-      }
-      return "indigo";
-    }
-    const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
-    const themeButtons = document.querySelectorAll("[theme-button]");
-    var valorCookie = obterValorCookie("theme");
-    
-    var currTheme = valorCookie;
-    
-    const updateDropdownHoverStyles = (theme) => {
-      document.querySelectorAll('.dropdown-menu a, .dropdown-menu li').forEach((link) => {
-        link.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
-        link.classList.add(`hover:bg-${theme}-500`, `hover:text-white`);
-      });
-    
-      document.cookie = `theme=${theme}; expires=Wed, 18 Dec 2024 12:00:00 UTC; path=/`;
-    
-    
-    };
-    
-    const changeTheme = (theme) => {
-      allElements.forEach((element) => {
-        const classes = element.getAttribute("class");
-        if (classes) {
-          const newClasses = classes.replace(new RegExp(`\\b${currTheme}\\b`, "g"), theme);
-          element.setAttribute("class", newClasses);
-        }
-      });
-      updateDropdownHoverStyles(theme);
-      currTheme = theme;
-    };
-    
-    themeButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        changeTheme(e.target.getAttribute("theme-button"));
-      });
-    });
-
-    
-    var currTheme = "indigo";
-    
-    themeButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        changeTheme(e.target.getAttribute("theme-button"));
-      });
-    });
+                    document.addEventListener('DOMContentLoaded', function () {
+                      // Seleciona todos os elementos que não possuem o atributo 'theme-button' e que não têm classes que contenham "gray"
+                      const allElements = document.querySelectorAll('*:not([theme-button]):not([class*="gray"])');
+                      
+                      // Seleciona todos os botões que possuem o atributo 'theme-button'
+                      const themeButtons = document.querySelectorAll("[theme-button]");
+                      
+                      // Inicializa o tema atual com o valor armazenado ou "indigo" se não houver nada armazenado
+                      let currTheme = localStorage.getItem('theme') || "indigo";
+                    
+                      // Função para aplicar o tema atual aos elementos
+                      function applyTheme(theme) {
+                        allElements.forEach((element) => {
+                          const classes = element.getAttribute("class");
+                          if (classes) {
+                            const newClasses = classes.replace(new RegExp(`\\b(indigo|gray|red|orange|green|teal|blue|purple|pink)\\b`, "g"), theme);
+                            element.setAttribute("class", newClasses);
+                          }
+                        });
+                        updateDropdownHoverStyles(theme);
+                      }
+                    
+                      // Função para atualizar as classes de estilo de hover no dropdown
+                      function updateDropdownHoverStyles(newTheme) {
+                        const dropdownItems = document.querySelectorAll('.dropdown-menu a, .dropdown-menu li');
+                        
+                        dropdownItems.forEach((item) => {
+                          item.classList.remove(`hover:bg-${currTheme}-500`, `hover:text-white`);
+                          item.classList.add(`hover:bg-${newTheme}-500`, `hover:text-white`);
+                        });
+                    
+                        // Armazena o novo tema no localStorage
+                        localStorage.setItem('theme', newTheme);
+                      }
+                    
+                      // Função para mudar o tema
+                      function changeTheme(newTheme) {
+                        applyTheme(newTheme);
+                        currTheme = newTheme;
+                        localStorage.setItem('theme', newTheme);
+                      }
+                    
+                      // Aplica o tema inicial
+                      applyTheme(currTheme);
+                    
+                      // Adiciona um listener de evento de clique para cada botão de tema
+                      themeButtons.forEach((button) => {
+                        button.addEventListener("click", (e) => {
+                          const selectedTheme = e.target.getAttribute("theme-button");
+                          changeTheme(selectedTheme);
+                        });
+                      });
+                    });
+                    
+                    
+                    document.addEventListener('DOMContentLoaded', function () {
   // Ouvinte de eventos para os links de livros
 
   const dropdownButton = document.getElementById('dropdownButton');
@@ -533,7 +539,46 @@
       // Fecha o dropdown após selecionar uma versão
       versionDropdown.classList.add('hidden');
   };
-  })
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const increaseFontButton = document.getElementById('increaseFont');
+    const decreaseFontButton = document.getElementById('decreaseFont');
+    const targetElements = document.querySelectorAll('.lg\\:text-sm, .sm\\:text-3xl'); // Selecione os elementos que você deseja alterar
+
+    // Função para aplicar o tamanho da fonte armazenado
+    const applyStoredFontSize = () => {
+        const storedFontSize = localStorage.getItem('fontSize');
+        if (storedFontSize) {
+            targetElements.forEach(element => {
+                element.style.fontSize = storedFontSize;
+            });
+        }
+    };
+
+    // Função para alterar o tamanho da fonte
+    const changeFontSize = (operation) => {
+        targetElements.forEach(element => {
+            const currentFontSize = parseFloat(window.getComputedStyle(element, null).getPropertyValue('font-size'));
+            let newFontSize;
+            if (operation === 'increase') {
+                newFontSize = currentFontSize + 1;
+            } else if (operation === 'decrease') {
+                newFontSize = currentFontSize - 1;
+            }
+            element.style.fontSize = newFontSize + 'px';
+            localStorage.setItem('fontSize', newFontSize + 'px'); // Armazena o novo tamanho da fonte
+        });
+    };
+
+    // Aplicar o tamanho da fonte armazenado ao carregar a página
+    applyStoredFontSize();
+
+    // Event listeners para os botões
+    increaseFontButton.addEventListener('click', () => changeFontSize('increase'));
+    decreaseFontButton.addEventListener('click', () => changeFontSize('decrease'));
+});
+
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>

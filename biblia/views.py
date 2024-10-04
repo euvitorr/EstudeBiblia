@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from biblia.models import Verse, Book, Version, Chapter
-from anotacoes.models import Note  # Ajuste para o nome real do seu modelo de anotações
-from django.db.models import Min, Max
+from anotacoes.models import Note
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -39,75 +38,12 @@ def salvar_nota(request, id_livro=None, id_capitulo=None, id_versao=None):
 
     else:
         return JsonResponse({'status': 'error', 'message': 'Método não suportado'}, status=405)
-
-
-
-def home(request, id_livro = None, id_capitulo = None, id_versao = None):
-
-    if id_livro != None and id_capitulo == None:
-        id_capitulo = 1
-    else:
-        id_capitulo = id_capitulo or request.COOKIES.get('capitulo', 1)
-    # Parâmetros que podem ser passados via URL ou como parâmetros GET
-    id_livro = id_livro or request.COOKIES.get('livro', 'gn')
-    id_versao = id_versao or request.COOKIES.get('versao', 'nvi')
     
-    nome_livro = request.GET.get('livro', id_livro)  # Exemplo: 'João'
-    id_versao = request.GET.get('versao', id_versao)  # Exemplo: 'nvi'
-    capitulo = request.GET.get('capitulo', id_capitulo)  # Exemplo: 4
-    # Buscar todos os livros disponíveis
-    books = Book.objects.all()
-
-    # Buscar o objeto do livro especificado, ou padrão se não especificado
-    book = get_object_or_404(Book, id=nome_livro)
-    
-    chaps = Chapter.objects.filter(book=book)
-    # Buscar o objeto da versão especificada, ou padrão se não especificado
-    version = get_object_or_404(Version, id=id_versao)
-    versions = Version.objects.all()
-    capitulo = get_object_or_404(Chapter, number=id_capitulo,book=book)
-    # Buscar todos os versículos do capítulo especificado na versão especificada
-    verses = Verse.objects.filter(book=book, chapter=capitulo, version=version)
-    
-    # Calcular o mínimo e o máximo número de versículo
-    verses_min = verses.order_by('number').first().number if verses.exists() else None
-    verses_max = verses.order_by('-number').first().number if verses.exists() else None
-    
-    # Adapte a busca de anotações para considerar o capítulo e versão especificados
-    annotations = Note.objects.filter(
-        version=version,
-        book=book,
-        chapter=capitulo
-    ).distinct()
-
-    context = {
-        'verses': verses,
-        'version': version,
-        'book': book,
-        'chapter': capitulo,
-        'verses_min': verses_min,
-        'verses_max': verses_max,
-        'annotations': annotations,
-        'books': books,
-        'chaps': chaps,
-        'versions':versions,
-        'user': request.user  # Adiciona o usuário logado ao contexto
-    }
-
-    # Criar a resposta renderizada
-    response = render(request, 'home.html', context)
-
-    # Definir um cookie na resposta
-    # O cookie 'versao_escolhida' expirará em 30 dias
-    response.set_cookie('livro', id_livro, max_age=30*24*60*60)
-    response.set_cookie('capitulo', id_capitulo, max_age=30*24*60*60)
-
-    return response
-
 # Novas views para AJAX
 def livros_list(request):
     livros = Book.objects.all().values('id', 'name')
     return JsonResponse(list(livros), safe=False)
+
 
 def capitulos_por_livro(request, id_livro, capitulo='1'):
     # Buscar o objeto do livro especificado, ou padrão se não especificado
@@ -159,3 +95,75 @@ def capitulos_por_livro(request, id_livro, capitulo='1'):
 def versiculos_por_capitulo(request, id_livro, id_capitulo):
     versiculos = Verse.objects.filter(book=id_livro, chapter=id_capitulo).values('verse', 'number')
     return JsonResponse(list(versiculos), safe=False)
+
+
+def home(request, id_livro=None, id_capitulo=None, id_versao=None):
+    if id_livro is not None and id_capitulo is None:
+        id_capitulo = 1
+    else:
+        id_capitulo = id_capitulo or request.COOKIES.get('capitulo', 1)
+        
+    id_livro = id_livro or request.COOKIES.get('livro', 'gn')
+    id_versao = id_versao or request.COOKIES.get('versao', 'nvi')
+    
+    nome_livro = request.GET.get('livro', id_livro)
+    id_versao = request.GET.get('versao', id_versao)
+    capitulo = request.GET.get('capitulo', id_capitulo)
+
+    books = Book.objects.all()
+    book = get_object_or_404(Book, id=nome_livro)
+    chaps = Chapter.objects.filter(book=book)
+    version = get_object_or_404(Version, id=id_versao)
+    versions = Version.objects.all()
+    capitulo = get_object_or_404(Chapter, number=id_capitulo, book=book)
+    verses = Verse.objects.filter(book=book, chapter=capitulo, version=version)
+    
+    verses_min = verses.order_by('number').first().number if verses.exists() else None
+    verses_max = verses.order_by('-number').first().number if verses.exists() else None
+    
+    annotations = Note.objects.filter(
+        version=version,
+        book=book,
+        chapter=capitulo
+    ).distinct()
+
+    context = {
+        'verses': verses,
+        'version': version,
+        'book': book,
+        'chapter': capitulo,
+        'verses_min': verses_min,
+        'verses_max': verses_max,
+        'annotations': annotations,
+        'books': books,
+        'chaps': chaps,
+        'versions': versions,
+        'user': request.user
+    }
+
+    if request.headers.get('Accept') == 'application/json':
+        # Retornar resposta JSON
+        response_data = {
+            'verses': list(verses.values('id', 'verse', 'number')),  # Changed 'text' to 'verse'
+            'version': version.id,
+            'book': book.id,
+            'chapter': capitulo.number,
+            'verses_min': verses_min,
+            'verses_max': verses_max,
+            'annotations': list(annotations.values('id', 'title', 'content')),
+            'books': list(books.values('id', 'name')),
+            'chaps': list(chaps.values('id', 'number')),
+            'versions': list(versions.values('id', 'name')),
+            'user': request.user.username if request.user.is_authenticated else None
+        }
+
+        return JsonResponse(response_data)
+
+    # Retornar resposta HTML
+    response = render(request, 'home.html', context)
+    response.set_cookie('livro', id_livro, max_age=30*24*60*60)
+    response.set_cookie('capitulo', id_capitulo, max_age=30*24*60*60)
+
+    return response
+
+
